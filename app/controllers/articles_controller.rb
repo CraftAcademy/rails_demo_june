@@ -13,7 +13,12 @@ class ArticlesController < ApplicationController
     if @article.persisted?
       redirect_to root_path, notice: 'Your article has been created'
     else
-      flash[:error] = "Your article could not be saved"
+      flash_message = "Your article could not be saved"
+      @article.errors.full_messages.each do |message|
+        flash_message += " - #{message}"
+      end
+      flash[:error] = flash_message
+      render :new
     end
   end
 
